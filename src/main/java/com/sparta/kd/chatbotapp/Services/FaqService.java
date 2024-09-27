@@ -1,10 +1,15 @@
 package com.sparta.kd.chatbotapp.Services;
 
-import com.sparta.kd.chatbotapp.Entities.Source;
+import com.sparta.kd.chatbotapp.Entities.Faq;
+import com.sparta.kd.chatbotapp.Entities.Keyword;
 import com.sparta.kd.chatbotapp.Repositories.FaqRepository;
 import com.sparta.kd.chatbotapp.Repositories.KeywordRepository;
 import com.sparta.kd.chatbotapp.Repositories.SourceRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class FaqService {
@@ -19,8 +24,24 @@ public class FaqService {
         this.sourceRepository = sourceRepository;
     }
 
-    public void findMatchingFaqs(String userInput) {
-        
+    public List<Faq> findMatchingFaqs(String userInput) {
+        String[] words = userInput.split(" ");
+        List<Keyword> keywords = keywordRepository.findAll();
+        ArrayList<Keyword> matchedKeywords = new ArrayList<>();
+
+        for (Keyword keyword : keywords) {
+            if (Arrays.stream(words).anyMatch(keyword.getKeyword()::contains)) {
+                matchedKeywords.add(keyword);
+            }
+        }
+
+        ArrayList<Faq> matchedFaqs = new ArrayList<>();
+
+        for (Keyword keyword : matchedKeywords) {
+            matchedFaqs.addAll(keyword.getFaqs());
+        }
+
+        return matchedFaqs;
     }
 
 }
