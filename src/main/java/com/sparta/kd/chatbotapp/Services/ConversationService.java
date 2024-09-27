@@ -2,7 +2,6 @@ package com.sparta.kd.chatbotapp.Services;
 
 import com.sparta.kd.chatbotapp.Entities.ConversationHistory;
 import com.sparta.kd.chatbotapp.Entities.ConversationHistoryId;
-import com.sparta.kd.chatbotapp.Entities.ConversationId;
 import com.sparta.kd.chatbotapp.Repositories.ConversationHistoryRepository;
 import com.sparta.kd.chatbotapp.Repositories.ConversationIdRepository;
 import org.springframework.data.domain.Example;
@@ -23,11 +22,12 @@ public class ConversationService {
         this.conversationHistoryRepository = conversationHistoryRepository;
     }
 
-    public long getNewConversationId() {
+    public Integer getNewConversationId() {
         if (conversationIdRepository.count() == 0) {
             return 1;
         } else {
-            return conversationIdRepository.count() + 1;
+            Long incrementedCount = conversationIdRepository.count() + 1;
+            return incrementedCount.intValue();
         }
     }
 
