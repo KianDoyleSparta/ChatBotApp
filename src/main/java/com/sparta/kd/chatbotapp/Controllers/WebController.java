@@ -1,5 +1,6 @@
 package com.sparta.kd.chatbotapp.Controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,8 +13,8 @@ import java.util.List;
 @RequestMapping("/chatbot")
 public class WebController {
 
-    // Mocked "database" to store messages per chat ID
-    private List<List<String>> chatHistoryDatabase = new ArrayList<>();
+    @Autowired
+
 
     @GetMapping
     public String getHome(Model model) {
