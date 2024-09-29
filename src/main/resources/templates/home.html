@@ -1,3 +1,70 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Finance ChatBot</title>-->
+<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">-->
+<!--    <style>-->
+<!--        .chat-container {-->
+<!--            max-width: 600px;-->
+<!--            margin: 50px auto;-->
+<!--        }-->
+<!--        .chat-box {-->
+<!--            height: 400px;-->
+<!--            overflow-y: auto;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body class="bg-dark text-light">-->
+<!--<div class="chat-container bg-secondary rounded shadow-lg">-->
+<!--    &lt;!&ndash; Chat Header &ndash;&gt;-->
+<!--    <div class="bg-dark text-center text-light py-3 rounded-top">-->
+<!--        <h1 class="h4 mb-0">Finance ChatBot</h1>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Chat Box &ndash;&gt;-->
+<!--    <div class="chat-box bg-dark p-3">-->
+<!--        <div class="d-flex mb-3">-->
+<!--            <div class="bg-secondary text-light py-2 px-3 rounded">-->
+<!--                &lt;!&ndash; Display the initial message or response from the chatbot &ndash;&gt;-->
+<!--                <span th:text="${responseMessage != null ? responseMessage : 'How can I help?'}"></span>-->
+<!--                <div th:if="${chatHistory != null}">-->
+<!--                    <div th:each="history : ${chatHistory}">-->
+<!--                        <p th:text="${history.getInput()}" class="align-self-end"></p>-->
+<!--                        <p th:text="${history.getResponse()}" class="align-self-start"></p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Input Form &ndash;&gt;-->
+<!--    <form th:if="${id == null}" th:action="@{/chatbot}" method="post" class="p-3 bg-dark rounded-bottom d-flex">-->
+<!--        <input type="text" class="form-control me-2" name="userInput" placeholder="Type your message..." required>-->
+<!--        <button type="submit" class="btn btn-danger">-->
+<!--            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">-->
+<!--                <path d="M15.854 8.146a.5.5 0 0 1 0 .708l-15 15a.5.5 0 0 1-.708-.708l15-15a.5.5 0 0 1 .708 0z"/>-->
+<!--                <path d="M4.5 9.5a.5.5 0 0 0-.5.5V11h-1v-1a1.5 1.5 0 0 1 1.5-1.5h8a.5.5 0 0 0 0-1h-8A1.5 1.5 0 0 1 3 8V7H2v1a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 0-1h-10a.5.5 0 0 0-.5.5V9h-1V8.5a.5.5 0 0 0 .5.5H2.5A.5.5 0 0 0 3 8V7h1v1h1V9h-1v-1a.5.5 0 0 0-.5.5v1H3v-1a.5.5 0 0 0 .5.5V9h-1v-.5z"/>-->
+<!--            </svg>-->
+<!--        </button>-->
+<!--    </form>-->
+
+<!--    <form th:if="${id != null}" th:action="@{/chatbot/{id}(id=${id})}" method="post" class="p-3 bg-dark rounded-bottom d-flex">-->
+<!--        <input type="text" class="form-control me-2" name="userInput" placeholder="Type your message..." required>-->
+<!--        <button type="submit" class="btn btn-danger">-->
+<!--            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">-->
+<!--                <path d="M15.854 8.146a.5.5 0 0 1 0 .708l-15 15a.5.5 0 0 1-.708-.708l15-15a.5.5 0 0 1 .708 0z"/>-->
+<!--                <path d="M4.5 9.5a.5.5 0 0 0-.5.5V11h-1v-1a1.5 1.5 0 0 1 1.5-1.5h8a.5.5 0 0 0 0-1h-8A1.5 1.5 0 0 1 3 8V7H2v1a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 0-1h-10a.5.5 0 0 0-.5.5V9h-1V8.5a.5.5 0 0 0 .5.5H2.5A.5.5 0 0 0 3 8V7h1v1h1V9h-1v-1a.5.5 0 0 0-.5.5v1H3v-1a.5.5 0 0 0 .5.5V9h-1v-.5z"/>-->
+<!--            </svg>-->
+<!--        </button>-->
+<!--    </form>-->
+
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->
+
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -5,14 +72,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Finance ChatBot</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
     <style>
         .chat-container {
-            max-width: 600px;
+            max-width: 80vw;
             margin: 50px auto;
         }
         .chat-box {
-            height: 400px;
+            height: 80vh;
             overflow-y: auto;
+        }
+        .input-message {
+            max-width: fit-content;
+            margin-left: auto;
+        }
+        .response-message {
+            max-width: fit-content;
+            margin-right: auto;
+        }
+        .bg-pink {
+            background-color: pink;
+            border-radius: 20px;
+            padding: 10px;
+            color: black;
+            display: inline-block;
+        }
+        .bg-white {
+            background-color: white;
+            border-radius: 20px;
+            padding: 10px;
+            color: black;
+            display: inline-block;
+        }
+        .bg-secondary {
+            height: 99%;
+        }
+        .chat-wrapper {
+            height: 95%;
         }
     </style>
 </head>
@@ -25,24 +121,38 @@
 
     <!-- Chat Box -->
     <div class="chat-box bg-dark p-3">
-        <div class="d-flex mb-3">
+        <div class="chat-wrapper d-flex mb-3">
             <div class="bg-secondary text-light py-2 px-3 rounded">
-                <!-- Display the initial message or response from the chatbot -->
-                <span th:text="${responseMessage != null ? responseMessage : 'How can I help?'}"></span>
+                <span th:text="${responseMessage != null ? responseMessage : 'Hello, I''m SpartaBot, how can I help you today?'}" class="response-message bg-white text-center"></span>
+                <div th:if="${chatHistory != null}">
+                    <div th:each="history : ${chatHistory}">
+                        <div class="d-flex mb-2">
+                            <p th:text="${history.getInput()}" class="input-message bg-pink text-center"></p>
+                        </div>
+                        <div class="d-flex mb-2">
+                            <p th:text="${history.getResponse()}" class="response-message bg-white text-center"></p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Input Form -->
-    <form th:action="@{/chatbot}" method="post" class="p-3 bg-dark rounded-bottom d-flex">
+    <form th:if="${id == null}" th:action="@{/chatbot}" method="post" class="p-3 bg-dark rounded-bottom d-flex">
         <input type="text" class="form-control me-2" name="userInput" placeholder="Type your message..." required>
         <button type="submit" class="btn btn-danger">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
-                <path d="M15.854 8.146a.5.5 0 0 1 0 .708l-15 15a.5.5 0 0 1-.708-.708l15-15a.5.5 0 0 1 .708 0z"/>
-                <path d="M4.5 9.5a.5.5 0 0 0-.5.5V11h-1v-1a1.5 1.5 0 0 1 1.5-1.5h8a.5.5 0 0 0 0-1h-8A1.5 1.5 0 0 1 3 8V7H2v1a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 0-1h-10a.5.5 0 0 0-.5.5V9h-1V8.5a.5.5 0 0 0 .5.5H2.5A.5.5 0 0 0 3 8V7h1v1h1V9h-1v-1a.5.5 0 0 0-.5.5v1H3v-1a.5.5 0 0 0 .5.5V9h-1v-.5z"/>
-            </svg>
+            <i class="bi bi-send"></i> <!-- Bootstrap icon -->
+        </button>
+    </form>
+
+    <form th:if="${id != null}" th:action="@{/chatbot/{id}(id=${id})}" method="post" class="p-3 bg-dark rounded-bottom d-flex">
+        <input type="text" class="form-control me-2" name="userInput" placeholder="Type your message..." required>
+        <button type="submit" class="btn btn-danger">
+            <i class="bi bi-send"></i> <!-- Bootstrap icon -->
         </button>
     </form>
 </div>
 </body>
 </html>
+

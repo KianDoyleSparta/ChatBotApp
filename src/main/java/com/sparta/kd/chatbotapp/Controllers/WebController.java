@@ -11,26 +11,31 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/chatbot")
+@RequestMapping
 public class WebController {
 
     @Autowired
     private ConversationService conversationService;
+    @Autowired
     private FaqService faqService;
+    @Autowired
     private ConversationFlowService conversationFlowService;
+    @Autowired
     private ResponseFormatter responseFormatter;
 
-    @GetMapping
+    @GetMapping("/chatbot")
     public String getHome(Model model) {
         model.addAttribute("responseMessage", conversationFlowService.getStartMessage());
+        model.addAttribute("id", null);
         return "home";
     }
 
-    @PostMapping
+    @PostMapping("/chatbot")
     public String postNewUserInput(@RequestParam("userInput") String userInput, RedirectAttributes redirectAttributes) {
         // Generate a response based on user input
         String responseMessage = responseFormatter.formatFaqResponse(new ArrayList<>(faqService.findMatchingFaqs(userInput)));
@@ -42,38 +47,35 @@ public class WebController {
 
         // Add attributes to the redirect
         redirectAttributes.addFlashAttribute("chatHistory", conversationHistories);
-
+        redirectAttributes.addFlashAttribute("id", newId);
         // Redirect to the /chatbot/{id} endpoint with the newly created chat ID
         return "redirect:/chatbot/" + newId;
     }
 
-    @GetMapping("/{id}")
-    public String getChatById(@PathVariable("id") int id, Model model, @ModelAttribute("chatHistory") ArrayList<ConversationHistory> conversationHistories) {
-        // If chatHistory is not present (e.g., accessing directly), fetch it from the "database"
-        if (conversationHistories == null || conversationHistories.isEmpty()) {
-            conversationHistories = new ArrayList<>(conversationService.getCurrentConversationById(id));
-        }
+    @GetMapping("/chatbot/{id}")
+    public String getChatById(@PathVariable("id") int id, Model model) {
+        ArrayList<ConversationHistory> conversationHistories = new ArrayList<>(conversationService.getCurrentConversationById(id));
 
         // Add chat history to the model
         model.addAttribute("chatHistory", conversationHistories);
-
+        model.addAttribute("id", id);
         return "home"; // Return the same view to display the chat history
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/chatbot/{id}")
     public String postUserInput(@PathVariable("id") int id, Model model, @ModelAttribute("chatHistory") ArrayList<ConversationHistory> conversationHistories, @RequestParam("userInput") String userInput, RedirectAttributes redirectAttributes) {
         // prompt a response
         // update chat history
         // save chat
         // place chat in chatHistory redirect and model attributes
 
-        String responseMessage = conversationFlowService.getStartMessage();
+        String responseMessage = responseFormatter.formatFaqResponse(new ArrayList<>(faqService.findMatchingFaqs(userInput)));
         conversationService.updateCurrentConversationById(id, userInput, responseMessage);
         conversationHistories = new ArrayList<>(conversationService.getCurrentConversationById(id));
 
         redirectAttributes.addFlashAttribute("chatHistory", conversationHistories);
-
-        return "redirect:/chatbot/{id}";
+        redirectAttributes.addFlashAttribute("id", id);
+        return "redirect:/chatbot/" + id;
 
     }
 }
