@@ -104,12 +104,6 @@
             color: black;
             display: inline-block;
         }
-        .bg-secondary {
-            height: 99%;
-        }
-        .chat-wrapper {
-            height: 95%;
-        }
     </style>
 </head>
 <body class="bg-dark text-light">
@@ -120,9 +114,9 @@
     </div>
 
     <!-- Chat Box -->
-    <div class="chat-box bg-dark p-3">
-        <div class="chat-wrapper d-flex mb-3">
-            <div class="bg-secondary text-light py-2 px-3 rounded">
+    <div class="chat-box bg-dark p-3 rounded">
+        <div class="d-flex mb-3 rounded">
+            <div class="py-2 px-3">
                 <span th:text="${responseMessage != null ? responseMessage : 'Hello, I''m SpartaBot, how can I help you today?'}" class="response-message bg-white text-center"></span>
                 <div th:if="${chatHistory != null}">
                     <div th:each="history : ${chatHistory}">
